@@ -1,7 +1,6 @@
 local M = {}
 
 local manager = require("manager.core")
-local utils = require("manager.command.utils")
 
 local subcommands = {
     ["clean"] = function()
@@ -73,7 +72,7 @@ function M.setup()
         if not sub then
             vim.notify(
                 "Usage: :Manager <" ..
-                table.concat(utils.get_table_keys(subcommands), "|") ..
+                table.concat(vim.tbl_keys(subcommands), "|") ..
                 "> [args]",
                 vim.log.levels.WARN
             )
@@ -90,7 +89,7 @@ function M.setup()
     end, {
         nargs = "*",
         complete = function(_, line)
-            local subcmds = table.keys(subcommands)
+            local subcmds = vim.tbl_keys(subcommands)
             local args = vim.split(line, "%s+")
             if #args == 2 then
                 return vim.tbl_filter(function(item)
