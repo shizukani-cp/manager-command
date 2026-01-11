@@ -2,7 +2,7 @@ local M = {}
 
 local manager = require("manager.core")
 
-local subcommands = {
+M.subcommands = {
     ["clean"] = function()
         manager.clean()
         vim.notify("Clean completed. Untracked plugins removed.")
@@ -60,7 +60,7 @@ local subcommands = {
 }
 
 function M.add_subcommand(name, body)
-    subcommands[name] = body
+    M.subcommands[name] = body
 end
 
 function M.setup()
@@ -71,14 +71,14 @@ function M.setup()
         if not sub then
             vim.notify(
                 "Usage: :Manager <" ..
-                table.concat(vim.tbl_keys(subcommands), "|") ..
+                table.concat(vim.tbl_keys(M.subcommands), "|") ..
                 "> [args]",
                 vim.log.levels.WARN
             )
             return
         end
 
-        for name, body in pairs(subcommands) do
+        for name, body in pairs(M.subcommands) do
             if sub == name then
                 body(args)
                 return
@@ -88,7 +88,7 @@ function M.setup()
     end, {
         nargs = "*",
         complete = function(_, line)
-            local subcmds = vim.tbl_keys(subcommands)
+            local subcmds = vim.tbl_keys(M.subcommands)
             local args = vim.split(line, "%s+")
             if #args == 2 then
                 return vim.tbl_filter(function(item)
