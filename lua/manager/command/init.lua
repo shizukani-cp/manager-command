@@ -60,8 +60,7 @@ local subcommands = {
 }
 
 function M.add_subcommand(name, body)
-    table.insert(subcommands, { [name] = body })
-    return subcommands
+    subcommands[name] = body
 end
 
 function M.setup()
