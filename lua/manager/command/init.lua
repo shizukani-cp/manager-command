@@ -1,12 +1,11 @@
 local M = {}
-local manager = require("manager.core")
 
 M.subcommands = {
-    ["clean"] = function()
-        manager.clean()
+    ["clean"] = function(manager)
+        manager:clean()
         vim.notify("Clean completed. Untracked plugins removed.")
     end,
-    ["list"] = function()
+    ["list"] = function(manager)
         local buf = vim.api.nvim_create_buf(false, true)
         local ids = {}
 
@@ -23,25 +22,25 @@ M.subcommands = {
         vim.api.nvim_buf_set_lines(buf, 0, -1, false, ids)
         vim.api.nvim_set_current_buf(buf)
     end,
-    ["load"] = function(args)
+    ["load"] = function(manager, args)
         local target = args[2]
         if not target then
             vim.notify("Please specify plugin id to load.", vim.log.levels.WARN)
             return
         end
-        manager.load(target)
+        manager:load(target)
     end,
-    ["remove"] = function(args)
+    ["remove"] = function(manager, args)
         local target = args[2]
         if not target then
             vim.notify("Please specify plugin id to remove.", vim.log.levels.WARN)
             return
         end
-        manager.remove(target)
+        manager:remove(target)
     end,
-    ["update"] = function(args)
+    ["update"] = function(manager, args)
         local target = args[2]
-        manager.update(target)
+        manager:update(target)
         if target then
             vim.notify("Updating plugin: " .. target)
         else
@@ -54,7 +53,7 @@ function M.add_subcommand(name, body)
     M.subcommands[name] = body
 end
 
-function M.setup()
+function M.setup(manager)
     vim.api.nvim_create_user_command("Manager", function(opts)
         local args = opts.fargs
         local sub = args[1]
@@ -69,7 +68,7 @@ function M.setup()
 
         for name, body in pairs(M.subcommands) do
             if sub == name then
-                body(args)
+                body(manager, args)
                 return
             end
         end
