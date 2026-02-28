@@ -31,10 +31,6 @@ M.subcommands = {
         end
         manager.load(target)
     end,
-    ["lock"] = function()
-        manager.lock()
-        vim.notify("Manager locked.")
-    end,
     ["remove"] = function(args)
         local target = args[2]
         if not target then
@@ -42,10 +38,6 @@ M.subcommands = {
             return
         end
         manager.remove(target)
-    end,
-    ["unlock"] = function()
-        manager.unlock()
-        vim.notify("Manager unlocked and queued loads processed.")
     end,
     ["update"] = function(args)
         local target = args[2]
