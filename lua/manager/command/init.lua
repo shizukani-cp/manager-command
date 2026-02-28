@@ -1,5 +1,4 @@
 local M = {}
-
 local manager = require("manager.core")
 
 M.subcommands = {
@@ -56,7 +55,7 @@ M.subcommands = {
         else
             vim.notify("Updating all plugins.")
         end
-    end
+    end,
 }
 
 function M.add_subcommand(name, body)
@@ -70,9 +69,7 @@ function M.setup()
 
         if not sub then
             vim.notify(
-                "Usage: :Manager <" ..
-                table.concat(vim.tbl_keys(M.subcommands), "|") ..
-                "> [args]",
+                "Usage: :Manager <" .. table.concat(vim.tbl_keys(M.subcommands), "|") .. "> [args]",
                 vim.log.levels.WARN
             )
             return
